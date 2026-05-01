@@ -1,0 +1,1 @@
+ALTER TABLE role_based_access_control ADD COLUMN role ENUM('admin', 'user') DEFAULT 'user';
