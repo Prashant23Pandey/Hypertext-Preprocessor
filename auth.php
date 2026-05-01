@@ -1,23 +1,21 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
+session_start();
+function restrictToAdmin(){
+    if(!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
+        header("Location: user_dashboard.php");
+        exit();
+    }
 }
-function isLoggedIn() {
-    return isset($_SESSION['user_id']);
+function checkLogin() {
+    if (!isset($_SESSION['user_id'])) {
+        header("Location: login.php");
+        exit();
+    }
 }
 function isAdmin() {
     return isset($_SESSION['role']) && $_SESSION['role'] === 'admin';
 }
-function restrictToAdmin() {
-    if (!isAdmin()) {
-        echo "<script>alert('Access Denied: Admins Only!'); window.location.href='user_dashboard.php';</script>";
-        exit();
-    }
-}
-function restrictToLoggedIn() {
-    if (!isLoggedIn()) {
-        header("Location: login.php");
-        exit();
-    }
+function isUser() {
+    return isset($_SESSION['role']) && $_SESSION['role'] === 'user';
 }
 ?>
