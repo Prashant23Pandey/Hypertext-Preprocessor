@@ -1,18 +1,23 @@
 <?php
+require 'db.php';
 require 'auth.php';
-restrictToLoggedIn(); 
+checkLogin();
+$stmt = $pdo->prepare("SELECT * FROM access WHERE id = ?");
+$stmt->execute([$_SESSION['user_id']]);
+$user = $stmt->fetch(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html>
-<head><title>Dashboard</title></head>
+<head><link rel="stylesheet" href="css/style.css"></head>
 <body>
-    <h1>Hello, <?php echo $_SESSION['username']; ?></h1>
-    <p>Welcome to your dashboard.</p>
-    <?php if (isAdmin()): ?>
-        <div style="background: #fcfa7e; padding: 10px; border: 1px solid #ccc;">
-            <strong>Admin Notice:</strong> You have access to the <a href="admin.php">Admin Panel</a>.
+    <div class="container">
+        <h1>Welcome, <?= htmlspecialchars($user['username']) ?></h1>
+        <div class="profile-card" style="background: white; padding: 20px; border-radius: 10px;">
+            <p><strong>Email:</strong> <?= $user['email'] ?></p>
+            <p><strong>Role:</strong> <?= strtoupper($user['role']) ?></p>
+            <p><strong>Status:</strong> <span style="color: green;">● Active</span></p>
         </div>
-    <?php endif; ?>
-    <a href="logout.php">Logout</a>
+        <br><a href="logout.php" class="btn btn-delete">Logout</a>
+    </div>
 </body>
 </html>
