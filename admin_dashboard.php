@@ -1,58 +1,21 @@
 <?php
-require 'db.php';
-require 'auth.php';
-
-// Only let admins pass
-if (!isset($_SESSION['role']) || strtolower(trim($_SESSION['role'])) !== 'admin') {
-    header("Location: user_dashboard.php");
+session_start();
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
+    header("Location: login.php?msg=Admin Access Only");
     exit();
 }
-
-$stmt = $pdo->query("SELECT * FROM access");
-$users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
-<html>
-<head><link rel="stylesheet" href="style.css"></head>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
 <body>
-    <div class="container">
-        <h1>Admin Control Center</h1>
-        <table>
-            <tr>
-                <th>ID</th><th>Username</th><th>Email</th><th>Role</th><th>Action</th>
-            </tr>
-            <?php foreach ($users as $user): ?>
-            <tr>
-                <td><?= $user['id'] ?></td>
-                <td><?= htmlspecialchars($user['username']) ?></td>
-                <td><?= htmlspecialchars($user['email']) ?></td>
-                <td><?= $user['role'] ?></td>
-                <td>
-                    <a href="edit.php?id=<?= $user['id'] ?>" class="btn-edit">Edit</a>
-                    <a href="admin_dashboard.php?del=<?= $user['id'] ?>" class="btn-danger">Delete</a>
-                </td>
-            </tr>
-            <?php endforeach; ?>
-        </table>
-    </div>
-</body>
-</html>
-<!DOCTYPE html>
-<html>
-<head><link rel="stylesheet" href="style.css"></head>
-<body>
-    <div class="container">
-        <h1>Admin Control Center</h1>
-        <table>
-            <?php foreach ($users as $user): ?>
-                <tr>
-                    <td><?= $user['id'] ?></td>
-                    <td><?= htmlspecialchars($user['username']) ?></td>
-                    <td><?= htmlspecialchars($user['email']) ?></td>
-                    <td><?= $user['role'] ?></td>
-                </tr>
-            <?php endforeach; ?>
-        </table>
-    </div>
+    <?php include 'navbar.php'; ?>
+    <div class="container mt-5">
+        <div class="alert alert-success">Welcome to the Admin Panel, <?php echo $_SESSION['username']; ?>!</div>
+        </div>
 </body>
 </html>
