@@ -1,12 +1,12 @@
 <?php
 $host = 'localhost';
-$db   = 'role_based_crud_system';
-$user = 'root';
-$pass = '';
+$dbname = 'first application';
+$username = 'root';    
+$password = '';          
 try {
-    $pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8mb4", $user, $pass);
+    $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
-    die("Database connection failed: " . $e->getMessage());
+    die("Connection failed: " . $e->getMessage());
 }
 ?>
