@@ -1,23 +1,22 @@
 <?php
-require 'db.php';
-require 'auth.php';
-checkLogin();
-$stmt = $pdo->prepare("SELECT * FROM access WHERE id = ?");
-$stmt->execute([$_SESSION['user_id']]);
-$user = $stmt->fetch(PDO::FETCH_ASSOC);
+session_start();
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'user') {
+    header("Location: login.php?msg=Please Login");
+    exit();
+}
 ?>
 <!DOCTYPE html>
-<html>
-<head><link rel="stylesheet" href="css/style.css"></head>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
 <body>
-    <div class="container">
-        <h1>Welcome, <?= htmlspecialchars($user['username']) ?></h1>
-        <div class="profile-card" style="background: white; padding: 20px; border-radius: 10px;">
-            <p><strong>Email:</strong> <?= $user['email'] ?></p>
-            <p><strong>Role:</strong> <?= strtoupper($user['role']) ?></p>
-            <p><strong>Status:</strong> <span style="color: green;">● Active</span></p>
-        </div>
-        <br><a href="logout.php" class="btn btn-delete">Logout</a>
+    <?php include 'navbar.php'; ?>
+    <div class="container mt-5 text-center">
+        <h1>Hello, <?php echo $_SESSION['username']; ?></h1>
+        <p>This is your standard user profile.</p>
     </div>
 </body>
 </html>
